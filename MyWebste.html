@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Explorer Rwanda · Software Engineer Portfolio</title>
+  <!-- Google Fonts (Inter + Space Grotesk) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind config for custom fonts / colours -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              dark: '#0B0F19',
+              card: '#121826',
+              accent: '#6C63FF',
+              accentGlow: '#8B7BFF',
+              accentSoft: '#A09AFF',
+            }
+          },
+          boxShadow: {
+            'glow': '0 0 25px -5px rgba(108, 99, 255, 0.4)',
+            'glow-lg': '0 0 40px -5px rgba(108, 99, 255, 0.6)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ---------- custom advanced effects (beyond Tailwind) ---------- */
+    body {
+      background: radial-gradient(circle at 20% 30%, #1a1f2e 0%, #0B0F19 70%);
+      color: #eef2ff;
+      scroll-behavior: smooth;
+    }
+
+    /* glassmorphism card */
+    .glass-card {
+      background: rgba(18, 24, 38, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(108, 99, 255, 0.2);
+      border-radius: 1.75rem;
+      transition: border 0.3s, box-shadow 0.3s, transform 0.2s;
+    }
+    .glass-card:hover {
+      border-color: rgba(108, 99, 255, 0.5);
+      box-shadow: 0 0 35px -8px rgba(108, 99, 255, 0.35);
+      transform: translateY(-4px);
+    }
+
+    /* gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #a09aff 0%, #6c63ff 50%, #4a42d0 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B0F19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2d3248;
+      border-radius: 20px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6C63FF;
+    }
+
+    /* animated gradient border for profile / hero */
+    .glow-border {
+      position: relative;
+      background: linear-gradient(145deg, #121826, #0B0F19);
+      border-radius: 2.5rem;
+      padding: 3px;
+    }
+    .glow-border::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 2.5rem;
+      padding: 3px;
+      background: linear-gradient(135deg, #6C63FF, #a09aff, #3d37a8, #6C63FF);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      animation: borderRotate 6s linear infinite;
+      background-size: 300% 300%;
+    }
+    @keyframes borderRotate {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* floating orb animation (background) */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.3;
+      z-index: -10;
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      top: -120px;
+      right: -80px;
+      background: #6C63FF;
+      animation: floatOrb 14s infinite alternate ease-in-out;
+    }
+    .orb-2 {
+      width: 350px;
+      height: 350px;
+      bottom: -100px;
+      left: -60px;
+      background: #4A42D0;
+      animation: floatOrb 18s infinite alternate-reverse ease-in-out;
+    }
+    .orb-3 {
+      width: 250px;
+      height: 250px;
+      top: 40%;
+      left: 20%;
+      background: #2b1fa0;
+      opacity: 0.15;
+      animation: floatOrb 22s infinite alternate ease-in-out;
+    }
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 30px) scale(1.1); }
+    }
+
+    /* project card hover effect with shine */
+    .project-card {
+      transition: transform 0.25s ease, box-shadow 0.3s;
+    }
+    .project-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 20px 35px -10px rgba(108, 99, 255, 0.3);
+    }
+
+    /* skill badge custom glow */
+    .skill-badge {
+      background: rgba(108, 99, 255, 0.1);
+      border: 1px solid rgba(108, 99, 255, 0.3);
+      transition: all 0.2s;
+    }
+    .skill-badge:hover {
+      background: rgba(108, 99, 255, 0.25);
+      border-color: #6C63FF;
+      box-shadow: 0 0 12px #6C63FF55;
+      transform: scale(1.03);
+    }
+
+    /* nav link underline effect */
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background: linear-gradient(90deg, #6C63FF, #a09aff);
+      transition: width 0.25s;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* button primary custom glow */
+    .btn-primary {
+      background: linear-gradient(135deg, #6C63FF, #4A42D0);
+      transition: all 0.25s;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 20px #6C63FFAA;
+      transform: scale(1.02);
+      filter: brightness(1.1);
+    }
+
+    /* timeline dot pulse */
+    .timeline-dot {
+      box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.7);
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(108, 99, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0); }
+    }
+
+    /* responsive tweaks */
+    @media (max-width: 640px) {
+      .glow-border::before { animation: none; }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased relative overflow-x-hidden">
+
+  <!-- floating background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ==================== NAVIGATION ==================== -->
+  <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#0B0F19]/70 border-b border-white/5">
+    <nav class="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
+      <!-- logo / name -->
+      <a href="#" class="font-display text-2xl font-bold tracking-tight flex items-center gap-2">
+        <span class="gradient-text">Code Explorer Rwanda</span>
+        <span class="text-accent text-xl">.dev</span>
+      </a>
+
+      <!-- desktop menu -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+        <a href="#about" class="nav-link hover:text-white transition">About</a>
+        <a href="#skills" class="nav-link hover:text-white transition">Skills</a>
+        <a href="#projects" class="nav-link hover:text-white transition">Projects</a>
+        <a href="#experience" class="nav-link hover:text-white transition">Experience</a>
+        <a href="#contact" class="nav-link hover:text-white transition">Contact</a>
+      </div>
+
+      <!-- CTA + mobile toggle -->
+      <div class="flex items-center gap-3">
+        <a href="#contact" class="hidden sm:inline-block btn-primary text-white text-sm font-semibold px-6 py-2.5 rounded-full shadow-lg shadow-brand-accent/20 transition">
+          Let's talk
+        </a>
+        <button id="menu-btn" class="md:hidden text-2xl text-gray-300 hover:text-white transition">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- mobile menu (hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden px-5 pb-6 pt-2 flex flex-col gap-4 bg-[#0B0F19]/95 backdrop-blur-lg border-t border-white/5 text-gray-300">
+      <a href="#about" class="hover:text-white transition py-1">About</a>
+      <a href="#skills" class="hover:text-white transition py-1">Skills</a>
+      <a href="#projects" class="hover:text-white transition py-1">Projects</a>
+      <a href="#experience" class="hover:text-white transition py-1">Experience</a>
+      <a href="#contact" class="hover:text-white transition py-1">Contact</a>
+      <a href="#contact" class="btn-primary text-center text-white font-semibold px-5 py-2.5 rounded-full mt-2">Let's talk</a>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-5 sm:px-8">
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="min-h-[85vh] flex flex-col lg:flex-row items-center justify-between gap-12 py-16 lg:py-20">
+      <!-- left text -->
+      <div class="flex-1 space-y-6 text-center lg:text-left">
+        <div class="inline-block px-4 py-1.5 rounded-full border border-brand-accent/30 bg-brand-accent/10 text-brand-accent text-sm font-medium tracking-wide">
+          <i class="fas fa-code me-2"></i> Software Engineer
+        </div>
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight">
+          Crafting <span class="gradient-text">digital</span><br>
+          experiences that <br> matter.
+        </h1>
+        <p class="text-lg text-gray-400 max-w-lg mx-auto lg:mx-0">
+          I'm Code Explorer — full-stack engineer with 7+ yeCode Explorer Rwandas of turning complex problems into elegant, scalable solutions. 
+          Specialised in React, Node.js, and cloud architecture.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center lg:justify-start pt-2">
+          <a href="#projects" class="btn-primary text-white font-semibold px-8 py-3.5 rounded-full shadow-xl shadow-brand-accent/20 flex items-center gap-2">
+            <i class="fas fa-arrow-down"></i> View my work
+          </a>
+          <a href="#contact" class="px-8 py-3.5 rounded-full border border-white/20 hover:border-brand-accent/60 hover:bg-white/5 transition font-medium flex items-center gap-2">
+            <i class="fas fa-paper-plane"></i> Contact me
+          </a>
+        </div>
+        <!-- social proof -->
+        <div class="flex items-center gap-5 justify-center lg:justify-start pt-4 text-gray-400">
+          <span class="text-sm">Find me on</span>
+          <div class="flex gap-4 text-xl">
+            <a href="#" class="hover:text-brand-accent transition"><i class="fab fa-github"></i></a>
+            <a href="#" class="hover:text-brand-accent transition"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="hover:text-brand-accent transition"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" class="hover:text-brand-accent transition"><i class="fab fa-dev"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- right avatar / visual -->
+      <div class="flex-1 flex justify-center lg:justify-end">
+        <div class="glow-border w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-[2.5rem] flex items-center justify-center p-1">
+          <div class="w-full h-full rounded-[2.3rem] bg-gradient-to-br from-[#1a1f2e] to-[#0B0F19] flex items-center justify-center relative overflow-hidden">
+            <!-- abstract code visual -->
+            <div class="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDQwIDQwIj48cGF0aCBkPSJNMjAgMjBhMTAgMTAgMCAwIDEgMTAtMTAgMTAgMTAgMCAwIDEgMTAgMTAgMTAgMTAgMCAwIDEtMTAgMTAgMTAgMTAgMCAwIDEtMTAtMTB6IiBmaWxsPSIjNmM2M2ZmIiBmaWxsLW9wYWNpdHk9IjAuMTUiLz48L3N2Zz4=')]"></div>
+            <!-- monogram -->
+            <div class="text-center z-10">
+              <div class="text-7xl sm:text-8xl font-display font-bold gradient-text">AR</div>
+              <div class="text-sm tracking-[0.3em] text-gray-400 mt-2">FULL STACK</div>
+            </div>
+            <!-- floating icons -->
+            <i class="fab fa-react absolute top-10 left-8 text-3xl text-cyan-400/40 animate-pulse"></i>
+            <i class="fab fa-node-js absolute bottom-12 right-8 text-4xl text-green-500/40 animate-pulse"></i>
+            <i class="fas fa-database absolute bottom-16 left-10 text-2xl text-blue-400/30"></i>
+            <i class="fab fa-aws absolute top-16 right-10 text-3xl text-orange-400/40"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ABOUT / STATS ==================== -->
+    <section id="about" class="py-16 scroll-mt-24">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="glass-card p-8 col-span-1 md:col-span-2">
+          <h2 class="text-3xl font-display font-semibold mb-4 flex items-center gap-3">
+            <i class="fas fa-user-astronaut text-brand-accent"></i> About me
+          </h2>
+          <p class="text-gray-300 leading-relaxed">
+            I'm a product-minded engineer who thrives at the intersection of clean code and user experience. 
+            Over the last 7 years I've shipped software for startups, scale-ups, and enterprise clients — from 
+            real-time dashboards to high-traffic e‑commerce platforms.
+          </p>
+          <p class="text-gray-400 mt-4 leading-relaxed">
+            I believe great software is built with empathy: understanding the user, the business, and the team. 
+            When I'm not coding, you'll find me contributing to open source or mentoring new devs.
+          </p>
+          <div class="flex flex-wrap gap-3 mt-6">
+            <span class="skill-badge px-4 py-1.5 rounded-full text-sm"><i class="fas fa-check-circle text-brand-accent me-2"></i>Remote ready</span>
+            <span class="skill-badge px-4 py-1.5 rounded-full text-sm"><i class="fas fa-check-circle text-brand-accent me-2"></i>Agile</span>
+            <span class="skill-badge px-4 py-1.5 rounded-full text-sm"><i class="fas fa-check-circle text-brand-accent me-2"></i>Team lead</span>
+          </div>
+        </div>
+        <div class="glass-card p-8 flex flex-col justify-center items-center text-center space-y-4">
+          <div>
+            <div class="text-5xl font-display font-bold gradient-text">7+</div>
+            <div class="text-sm text-gray-400 uppercase tracking-wider">Years experience</div>
+          </div>
+          <div class="w-12 h-px bg-white/10"></div>
+          <div>
+            <div class="text-5xl font-display font-bold gradient-text">40+</div>
+            <div class="text-sm text-gray-400 uppercase tracking-wider">Projects delivered</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SKILLS ==================== -->
+    <section id="skills" class="py-16 scroll-mt-24">
+      <h2 class="text-4xl font-display font-semibold text-center mb-4">
+        <span class="gradient-text">Tech</span> I work with
+      </h2>
+      <p class="text-center text-gray-400 max-w-2xl mx-auto mb-12">A modern toolkit for building fast, reliable, and beautiful applications.</p>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <!-- each skill badge -->
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fab fa-react text-4xl text-cyan-400"></i>
+          <span class="font-medium">React</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fab fa-js text-4xl text-yellow-400"></i>
+          <span class="font-medium">JavaScript</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fab fa-node-js text-4xl text-green-500"></i>
+          <span class="font-medium">Node.js</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fab fa-python text-4xl text-blue-400"></i>
+          <span class="font-medium">Python</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fas fa-database text-4xl text-purple-400"></i>
+          <span class="font-medium">PostgreSQL</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fab fa-aws text-4xl text-orange-400"></i>
+          <span class="font-medium">AWS</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fab fa-docker text-4xl text-blue-500"></i>
+          <span class="font-medium">Docker</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fab fa-vuejs text-4xl text-emerald-400"></i>
+          <span class="font-medium">Vue</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fas fa-code text-4xl text-indigo-300"></i>
+          <span class="font-medium">TypeScript</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fas fa-cloud text-4xl text-sky-400"></i>
+          <span class="font-medium">GCP</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fas fa-bolt text-4xl text-yellow-300"></i>
+          <span class="font-medium">GraphQL</span>
+        </div>
+        <div class="glass-card p-5 text-center hover:border-brand-accent/50 transition flex flex-col items-center gap-2">
+          <i class="fas fa-wind text-4xl text-teal-300"></i>
+          <span class="font-medium">Tailwind</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PROJECTS ==================== -->
+    <section id="projects" class="py-16 scroll-mt-24">
+      <h2 class="text-4xl font-display font-semibold text-center mb-4">
+        Featured <span class="gradient-text">projects</span>
+      </h2>
+      <p class="text-center text-gray-400 max-w-2xl mx-auto mb-12">Real-world applications I've built and shipped.</p>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- project 1 -->
+        <div class="project-card glass-card overflow-hidden p-0">
+          <div class="h-40 bg-gradient-to-br from-indigo-600/30 to-purple-600/20 flex items-center justify-center text-5xl">
+            <i class="fas fa-chart-line text-indigo-300/70"></i>
+          </div>
+          <div class="p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-display font-semibold">Analytics Dashboard</h3>
+              <span class="text-xs px-2 py-1 rounded-full bg-brand-accent/20 text-brand-accent">SaaS</span>
+            </div>
+            <p class="text-gray-400 text-sm">Real-time data visualisation platform handling 1M+ events/day. Built with React, D3, and Node.js.</p>
+            <div class="flex gap-3 text-sm text-gray-500 pt-1">
+              <span><i class="fab fa-react me-1"></i>React</span>
+              <span><i class="fas fa-database me-1"></i>Postgres</span>
+              <span><i class="fas fa-cloud me-1"></i>AWS</span>
+            </div>
+            <a href="#" class="inline-flex items-center text-brand-accent text-sm font-medium mt-2 hover:underline">
+              Case study <i class="fas fa-arrow-right ms-2 text-xs"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- project 2 -->
+        <div class="project-card glass-card overflow-hidden p-0">
+          <div class="h-40 bg-gradient-to-br from-emerald-600/30 to-teal-600/20 flex items-center justify-center text-5xl">
+            <i class="fas fa-cart-shopping text-emerald-300/70"></i>
+          </div>
+          <div class="p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-display font-semibold">SwiftCart</h3>
+              <span class="text-xs px-2 py-1 rounded-full bg-brand-accent/20 text-brand-accent">E‑commerce</span>
+            </div>
+            <p class="text-gray-400 text-sm">Headless e‑commerce storefront with blazing-fast search and checkout. Next.js + Stripe + Sanity.</p>
+            <div class="flex gap-3 text-sm text-gray-500 pt-1">
+              <span><i class="fab fa-react me-1"></i>Next.js</span>
+              <span><i class="fas fa-credit-card me-1"></i>Stripe</span>
+              <span><i class="fas fa-bolt me-1"></i>Vercel</span>
+            </div>
+            <a href="#" class="inline-flex items-center text-brand-accent text-sm font-medium mt-2 hover:underline">
+              Live demo <i class="fas fa-arrow-right ms-2 text-xs"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- project 3 -->
+        <div class="project-card glass-card overflow-hidden p-0">
+          <div class="h-40 bg-gradient-to-br from-rose-600/30 to-orange-600/20 flex items-center justify-center text-5xl">
+            <i class="fas fa-robot text-rose-300/70"></i>
+          </div>
+          <div class="p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-display font-semibold">SupportAI</h3>
+              <span class="text-xs px-2 py-1 rounded-full bg-brand-accent/20 text-brand-accent">AI</span>
+            </div>
+            <p class="text-gray-400 text-sm">AI-powered customer support bot with fine-tuned LLM. Reduced ticket volume by 42% for a fintech client.</p>
+            <div class="flex gap-3 text-sm text-gray-500 pt-1">
+              <span><i class="fas fa-python me-1"></i>Python</span>
+              <span><i class="fas fa-brain me-1"></i>OpenAI</span>
+              <span><i class="fas fa-cloud me-1"></i>GCP</span>
+            </div>
+            <a href="#" class="inline-flex items-center text-brand-accent text-sm font-medium mt-2 hover:underline">
+              Read more <i class="fas fa-arrow-right ms-2 text-xs"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== EXPERIENCE TIMELINE ==================== -->
+    <section id="experience" class="py-16 scroll-mt-24">
+      <h2 class="text-4xl font-display font-semibold text-center mb-4">
+        Where I've <span class="gradient-text">worked</span>
+      </h2>
+      <p class="text-center text-gray-400 max-w-2xl mx-auto mb-12">A timeline of my professional journey.</p>
+
+      <div class="max-w-3xl mx-auto relative">
+        <!-- vertical line -->
+        <div class="absolute left-6 top-4 bottom-4 w-px bg-gradient-to-b from-brand-accent/60 via-brand-accent/20 to-transparent"></div>
+
+        <!-- item 1 -->
+        <div class="relative pl-16 pb-12">
+          <div class="timeline-dot absolute left-6 top-1 w-4 h-4 rounded-full bg-brand-accent -translate-x-1/2 border-2 border-[#0B0F19] z-10"></div>
+          <div class="glass-card p-6">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <h3 class="text-xl font-semibold">Senior Software Engineer</h3>
+              <span class="text-sm px-3 py-1 rounded-full bg-brand-accent/20 text-brand-accent">2022 – Present</span>
+            </div>
+            <div class="text-brand-accentSoft text-sm font-medium mb-3">TechFlow · Remote</div>
+            <p class="text-gray-400 text-sm">Lead frontend architecture for a B2B analytics platform. Mentored 4 junior devs and introduced design system that cut feature delivery time by 30%.</p>
+          </div>
+        </div>
+
+        <!-- item 2 -->
+        <div class="relative pl-16 pb-12">
+          <div class="timeline-dot absolute left-6 top-1 w-4 h-4 rounded-full bg-brand-accent -translate-x-1/2 border-2 border-[#0B0F19] z-10"></div>
+          <div class="glass-card p-6">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <h3 class="text-xl font-semibold">Full Stack Developer</h3>
+              <span class="text-sm px-3 py-1 rounded-full bg-brand-accent/20 text-brand-accent">2019 – 2022</span>
+            </div>
+            <div class="text-brand-accentSoft text-sm font-medium mb-3">Craftly · Berlin</div>
+            <p class="text-gray-400 text-sm">Built and scaled a marketplace from MVP to 50k monthly users. Owned the entire stack: React, Node, PostgreSQL, and AWS infrastructure.</p>
+          </div>
+        </div>
+
+        <!-- item 3 -->
+        <div class="relative pl-16">
+          <div class="timeline-dot absolute left-6 top-1 w-4 h-4 rounded-full bg-brand-accent -translate-x-1/2 border-2 border-[#0B0F19] z-10"></div>
+          <div class="glass-card p-6">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <h3 class="text-xl font-semibold">Frontend Developer</h3>
+              <span class="text-sm px-3 py-1 rounded-full bg-brand-accent/20 text-brand-accent">2017 – 2019</span>
+            </div>
+            <div class="text-brand-accentSoft text-sm font-medium mb-3">Studio Pixel · London</div>
+            <p class="text-gray-400 text-sm">Delivered 20+ responsive websites for clients across fintech, health, and retail. Focused on accessibility and performance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACT ==================== -->
+    <section id="contact" class="py-16 scroll-mt-24">
+      <div class="glass-card p-8 sm:p-12 max-w-3xl mx-auto text-center relative overflow-hidden">
+        <!-- decorative glow -->
+        <div class="absolute -top-20 -right-20 w-64 h-64 bg-brand-accent/20 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-brand-accent/10 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 space-y-6">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent/20 text-brand-accent text-3xl mx-auto">
+            <i class="fas fa-paper-plane"></i>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-display font-bold">Let's build something <span class="gradient-text">great</span></h2>
+          <p class="text-gray-400 max-w-lg mx-auto">I'm currently open to freelance projects and full-time opportunities. Drop me a line — I'll get back within 24h.</p>
+          
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <a href="mailto:hello@alexrivera.dev" class="btn-primary text-white font-semibold px-8 py-3.5 rounded-full flex items-center gap-2 shadow-lg shadow-brand-accent/20">
+              <i class="fas fa-envelope"></i> hello@alexrivera.dev
+            </a>
+            <div class="flex gap-4 text-xl text-gray-400">
+              <a href="#" class="hover:text-brand-accent transition"><i class="fab fa-github"></i></a>
+              <a href="#" class="hover:text-brand-accent transition"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#" class="hover:text-brand-accent transition"><i class="fab fa-x-twitter"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-white/5 py-8 mt-8">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <div>© 2025 Code Explorer Rwanda. Built with <i class="fas fa-heart text-brand-accent mx-1"></i> and too much coffee.</div>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-gray-300 transition">Privacy</a>
+        <a href="#" class="hover:text-gray-300 transition">Terms</a>
+        <a href="#" class="hover:text-gray-300 transition">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- mobile menu toggle script -->
+  <script>
+    (function() {
+      const menuBtn = document.getElementById('menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+          // change icon
+          const icon = menuBtn.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+          }
+        });
+
+        // close mobile menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            const icon = menuBtn.querySelector('i');
+            if (icon) {
+              icon.classList.add('fa-bars');
+              icon.classList.remove('fa-times');
+            }
+          });
+        });
+      }
+    })();
+  </script>
+
+  <!-- optional: tiny fade-in on scroll (pure JS) for extra polish -->
+  <script>
+    (function() {
+      const sections = document.querySelectorAll('section');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = 1;
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      sections.forEach(section => {
+        section.style.opacity = 0;
+        section.style.transform = 'translateY(20px)';
+        section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(section);
+      });
+
+      // hero section should always be visible (it's above the fold)
+      const hero = document.querySelector('section:first-of-type');
+      if (hero) {
+        hero.style.opacity = 1;
+        hero.style.transform = 'translateY(0)';
+      }
+    })();
+  </script>
+
+</body>
+</html>

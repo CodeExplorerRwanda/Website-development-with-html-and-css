@@ -1,0 +1,23 @@
+#gameBoard {
+    border: 3px solid;
+    width: 30%;
+}
+
+#gameContaier {
+    text-align: center;
+}
+
+#scoreText {
+    font-family: "parmanet Marker", cursive;
+    font-size: 100px;
+}
+
+#resetBtn {
+    font-family: "parmanet Marker" cursive;
+    font-size: 22px;
+    width: 100px;
+    height: 50px;
+    border: 4xp solid;
+    border-radius: 15px;
+    cursor: pointer;
+}
